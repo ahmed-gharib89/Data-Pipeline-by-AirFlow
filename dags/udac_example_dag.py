@@ -20,7 +20,7 @@ default_args = {
     'max_active_runs':1
 }
 
-dag = DAG('udac_example_dag',
+dag = DAG('gharib_dag',
           default_args=default_args,
           description='Load and transform data in Redshift with Airflow',
           schedule_interval='@daily'
