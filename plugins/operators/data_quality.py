@@ -22,7 +22,7 @@ class DataQualityOperator(BaseOperator):
         for check in self.checks:
             query = check.get('query')
             expected = check.get('expected')
-            result = redshift.run(query)
+            result = redshift.get_records(query)
             self.log.info(result)
 
             if expected == '+':
