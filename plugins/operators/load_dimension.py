@@ -11,6 +11,7 @@ class LoadDimensionOperator(BaseOperator):
                  redshift_conn_id='',
                  table='',
                  query='',
+                 append_data=True,
                  *args, **kwargs):
 
         super(LoadDimensionOperator, self).__init__(*args, **kwargs)
@@ -20,8 +21,11 @@ class LoadDimensionOperator(BaseOperator):
 
     def execute(self, context):
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
-        self.log.info("Clearing data from {self.table} table")
-        redshift.run("DELETE FROM {}".format(self.table))
+
+        if not self.append_data:
+            self.log.info("Clearing data from {self.table} table")
+            del_query = f"DELETE FROM {self.table}"
+            redshift.run(del_query)
 
         self.log.info("Inserting data into {self.table}")
         query = f"""
