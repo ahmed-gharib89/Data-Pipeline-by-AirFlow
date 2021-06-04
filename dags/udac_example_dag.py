@@ -12,11 +12,11 @@ from helpers import SqlQueries
 default_args = {
     'owner': 'udacity',
     'start_date': datetime(2021, 6, 3),
-    # 'depends_on_past': False,
-    # 'retries': 3,
-    # 'retry_delay': timedelta(minutes=5),
-    # 'catchup': False,
-    # 'email_on_retry': False,
+    'depends_on_past': False,
+    'retries': 3,
+    'retry_delay': timedelta(minutes=5),
+    'catchup': False,
+    'email_on_retry': False,
     'max_active_runs':1
 }
 
@@ -46,7 +46,7 @@ stage_songs_to_redshift = StageToRedshiftOperator(
     aws_credentials_id='aws_credentials',
     table='staging_songs',
     s3_bucket='udacity-dend',
-    s3_key='song_data/A/A/A',
+    s3_key='song_data/A/A/',
     json_format='auto'
 )
 
