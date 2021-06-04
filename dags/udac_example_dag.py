@@ -11,7 +11,7 @@ from helpers import SqlQueries
 
 default_args = {
     'owner': 'udacity',
-    'start_date': datetime(2021, 4, 5),
+    'start_date': datetime(2021, 6, 3),
     # 'depends_on_past': False,
     # 'retries': 3,
     # 'retry_delay': timedelta(minutes=5),
@@ -97,7 +97,7 @@ check_empty = [{'query': f"SELECT COUNT (1) FROM {table}",
                 'fail_message': f'{table} table is empty'}
                 for table in tables
                 ]
-                
+
 nulls_dict = {
     'songplays': 'userid',
     'songs': 'songid',
