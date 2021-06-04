@@ -92,9 +92,7 @@ load_time_dimension_table = LoadDimensionOperator(
 
 tables = ['staging_events', 'staging_songs', 'songplays', 'users', 'songs', 'artists', 'time']
 check_empty = [{'query': f"SELECT COUNT (1) FROM {table}",
-                'expected': '> 0',
-                'message': f'The value for {table} table is: <>',
-                'fail_message': f'{table} table is empty'}
+                'expected': '+'}
                 for table in tables
                 ]
 
@@ -104,9 +102,7 @@ nulls_dict = {
     }
 
 check_nulls = [{'query': f"SELECT COUNT (1) FROM {table} WHERE {column} IS NULL",
-                'expected': '0',
-                'message': f'{table} table has no NULL values for column {column}',
-                'fail_message': f'for table {table} column {column} has NULL values'}
+                'expected': '0'}
                 for table, column in nulls_dict.items()]
 
 checks = check_empty + check_nulls

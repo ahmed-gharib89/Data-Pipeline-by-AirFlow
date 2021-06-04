@@ -21,5 +21,22 @@ class DataQualityOperator(BaseOperator):
 
         for check in self.checks:
             query = check.get('query')
+            expected = check.get('expected')
             result = redshift.run(query)
             self.log.info(result)
+
+            if expected == '+':
+                if int(result[0][0]) > 0:
+                    self.log.info(f"Cheack passed")
+                else:
+                    raise ValueError(f"Expected positive value for row counts but got {result[0][0]} instead")
+                
+            elif expected == '0':
+                if int(result[0][0]) == 0:
+                    self.log.info(f"Cheack passed")
+                else:
+                    raise ValueError(f"Expected 0 for row counts but got {result[0][0]} instead")
+                
+
+
+        
