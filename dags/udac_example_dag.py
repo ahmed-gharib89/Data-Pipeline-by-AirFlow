@@ -90,7 +90,7 @@ load_time_dimension_table = LoadDimensionOperator(
     query=SqlQueries.time_table_insert
 )
 
-tables = ['Stage_events', 'Stage_songs', 'songplays', 'users', 'songs', 'artists', 'time']
+tables = ['staging_events', 'staging_songs', 'songplays', 'users', 'songs', 'artists', 'time']
 check_empty = [{'query': f"SELECT COUNT (1) FROM {table}",
                 'expected': '> 0',
                 'message': f'The value for {table} table is: <>',
