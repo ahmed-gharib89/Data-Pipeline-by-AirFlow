@@ -23,7 +23,7 @@ default_args = {
 dag = DAG('udac_example_dag',
           default_args=default_args,
           description='Load and transform data in Redshift with Airflow',
-          schedule_interval='* * 0 * *'
+          schedule_interval='@daily'
         )
 
 start_operator = DummyOperator(task_id='Begin_execution',  dag=dag)
@@ -90,7 +90,26 @@ load_time_dimension_table = LoadDimensionOperator(
     query=SqlQueries.time_table_insert
 )
 
-checks = []
+tables = ['Stage_events', 'Stage_songs', 'songplays', 'users', 'songs', 'artists', 'time']
+check_empty = [{'query': f"SELECT COUNT (1) FROM {table}",
+                'expected': '> 0',
+                'message': f'The value for {table} table is: <>',
+                'fail_message': f'{table} table is empty'}
+                for table in tables
+                ]
+                
+nulls_dict = {
+    'songplays': 'userid',
+    'songs': 'songid',
+    }
+
+check_nulls = [{'query': f"SELECT COUNT (1) FROM {table} WHERE {column} IS NULL",
+                'expected': '0',
+                'message': f'{table} table has no NULL values for column {column}',
+                'fail_message': f'for table {table} column {column} has NULL values'}
+                for table, column in nulls_dict.items()]
+
+checks = check_empty + check_nulls
 run_quality_checks = DataQualityOperator(
     task_id='Run_data_quality_checks',
     dag=dag,

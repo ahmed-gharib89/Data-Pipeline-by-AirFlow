@@ -9,7 +9,7 @@ class DataQualityOperator(BaseOperator):
     @apply_defaults
     def __init__(self,
                  redshift_conn_id='',
-                 checks='',
+                 checks=[],
                  *args, **kwargs):
 
         super(DataQualityOperator, self).__init__(*args, **kwargs)
@@ -17,4 +17,9 @@ class DataQualityOperator(BaseOperator):
         self.checks = checks
 
     def execute(self, context):
-        self.log.info('DataQualityOperator not implemented yet')
+        redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
+
+        for check in self.checks:
+            query = check.get('query')
+            result = redshift.run(query)
+            self.log.info(result)
