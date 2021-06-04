@@ -20,9 +20,7 @@ class LoadFactOperator(BaseOperator):
 
     def execute(self, context):
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
-        self.log.info("Clearing data from {self.table} table")
-        redshift.run("DELETE FROM {}".format(self.table))
-
+        
         self.log.info("Inserting data into {self.table}")
         query = f"""
             INSERT INTO {self.table}
